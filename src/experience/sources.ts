@@ -34,6 +34,6 @@ export const sources = [
 
 export interface SourceInterface {
     name: string;
-    type: 'texture' | 'cubeTexture' | 'gltfModel';
+    type: 'texture' | 'cubeTexture' | 'gltfModel' | 'fbxModel';
     path: string[] | string
 }

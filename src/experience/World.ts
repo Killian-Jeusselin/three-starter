@@ -5,6 +5,7 @@ import {Resources} from "../classes/Resources";
 import {Floor} from "./Floor";
 import {Character} from "./Character";
 import {Dummy} from "./Dummy";
+import {SimpleCharacter} from "../classes/SimpleCharacter";
 
 
 export class World {
@@ -13,8 +14,9 @@ export class World {
     private environment: Environment;
     private resources: Resources;
     private floor: Floor;
-    private character: Character;
+    private character: SimpleCharacter;
     private dummy: Dummy;
+    private characterSnd: SimpleCharacter;
 
     constructor() {
         this.experience = new Experience()
@@ -26,14 +28,41 @@ export class World {
             // Setup
             this.floor = new Floor()
             //this.character = new Character()
-            this.dummy = new Dummy()
+            //this.dummy = new Dummy()
             this.environment = new Environment()
+            this.character = new SimpleCharacter({
+                modelResource: {
+                    name: 'dummy',
+                    type: 'gltfModel',
+                    path: 'static/models/dummy_animated/dummy_animated.glb'
+                },
+                name: 'test',
+            });
+            this.character.init()
+
+            this.characterSnd =  new SimpleCharacter({
+                modelResource: {
+                    name: 'dummy',
+                    type: 'gltfModel',
+                    path: 'static/models/dummy_animated/dummy_animated.glb'
+                },
+                name: 'Character2',
+                position: {
+                    x: 2,
+                    y: 0,
+                    z: 1,
+                }
+            });
+            this.characterSnd.init()
         })
     }
 
     public update() {
         if (this.character) {
             this.character.update()
+        }
+        if (this.characterSnd) {
+            this.characterSnd.update()
         }
         if (this.dummy) {
             this.dummy.update()
