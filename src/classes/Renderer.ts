@@ -10,7 +10,7 @@ export class Renderer {
     private sizes: Sizes;
     private readonly scene: Scene;
     private camera: Camera;
-    private instance: THREE.WebGLRenderer | undefined;
+    instance: THREE.WebGLRenderer | undefined;
     private context: WebGLRenderingContext | WebGL2RenderingContext;
 
     constructor() {

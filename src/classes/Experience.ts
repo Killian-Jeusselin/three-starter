@@ -3,18 +3,23 @@ import {Sizes} from "./Utils/Sizes";
 import {Time} from "./Utils/Time";
 import {Camera} from "./Camera";
 import {Renderer} from "./Renderer";
-import {World} from "./World";
+import {World} from "../experience/World";
+import {Resources} from "./Resources";
+import {SourceInterface, sources} from "../experience/sources";
+import {Debug} from "./Utils/Debug";
 
 let instance: Experience | null = null
 
 export class Experience {
     public canvas: HTMLCanvasElement;
     public sizes: Sizes;
-    private time: Time;
+    public time: Time;
     public scene: THREE.Scene;
     public camera: Camera;
     private renderer: Renderer;
     private world: World;
+    public resources : Resources;
+    public debug: Debug;
 
     constructor(canvas: string | undefined = undefined) {
 
@@ -25,16 +30,20 @@ export class Experience {
         }
         instance = this
 
+        this.resources = new Resources(sources as SourceInterface[])
+
         window.experience = this
         this.createCanvas(canvas);
 
         // Init of the different component
+        this.debug = new Debug()
         this.sizes = new Sizes()
         this.time = new Time()
         this.scene = new THREE.Scene()
         this.camera = new Camera()
         this.world = new World()
         this.renderer = new Renderer()
+
 
         // Resize event
         this.sizes.on('resize', () => {
@@ -53,6 +62,7 @@ export class Experience {
      */
     private update(): void {
         this.camera.update()
+        this.world.update()
         this.renderer.update()
     }
 
@@ -70,7 +80,7 @@ export class Experience {
      * @param {string | undefined} canvas
      * @private
      */
-    private createCanvas(canvas: string | undefined) {
+    private createCanvas(canvas: string | undefined): void {
         // Check if canvas element is a canvas or exist
         if (document.getElementById(canvas!) instanceof HTMLCanvasElement) {
             const el = document.getElementById(canvas!);
@@ -87,5 +97,37 @@ export class Experience {
             document.getElementById(canvas!)!.appendChild(canvasElement)
             this.canvas = canvasElement
         }
+    }
+
+    public destroy(): void
+    {
+        this.sizes.off('resize')
+        this.time.off('tick')
+
+        // Traverse the whole scene
+        this.scene.traverse((child) =>
+        {
+            // Test if it's a mesh
+            if(child instanceof THREE.Mesh)
+            {
+                child.geometry.dispose()
+
+                // Loop through the material properties
+                for(const key in child.material)
+                {
+                    const value = child.material[key]
+
+                    // Test if there is a dispose function
+                    if(value && typeof value.dispose === 'function')
+                    {
+                        value.dispose()
+                    }
+                }
+            }
+        })
+        this.camera.controls.dispose()
+        this.renderer.instance?.dispose()
+        this.debug?.ui?.destroy()
+        this.canvas.remove()
     }
 }

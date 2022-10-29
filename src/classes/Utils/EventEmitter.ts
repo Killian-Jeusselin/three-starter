@@ -13,7 +13,7 @@ export class EventEmitter {
         this.callbacks.base = {}
     }
 
-    on(_names: string, callback: Function) {
+    public on(_names: string, callback: Function) {
         // Errors
         if (typeof _names === 'undefined' || _names === '') {
             console.warn('wrong names')
@@ -47,7 +47,7 @@ export class EventEmitter {
         return this
     }
 
-    off(_names: string) {
+    public off(_names: string) {
         // Errors
         if (typeof _names === 'undefined' || _names === '') {
             console.warn('wrong name')
@@ -101,7 +101,7 @@ export class EventEmitter {
         return this
     }
 
-    trigger(_name: string, _args?: any[]) {
+    public trigger(_name: string, _args?: any[]) {
         // Errors
         if (typeof _name === 'undefined' || _name === '') {
             console.warn('wrong name')
@@ -156,7 +156,7 @@ export class EventEmitter {
         return finalResult
     }
 
-    resolveNames(_names: string) {
+    private resolveNames(_names: string) {
         let names: string | string[] = _names
         names = names.replace(/[^a-zA-Z0-9 ,/.]/g, '')
         names = names.replace(/[,/]+/g, ' ')
@@ -165,7 +165,7 @@ export class EventEmitter {
         return names
     }
 
-    resolveName(name: string) {
+    private resolveName(name: string) {
         const newName: Partial<Name> = {}
         const parts = name.split('.')
 
