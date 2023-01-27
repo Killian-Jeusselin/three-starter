@@ -133,4 +133,10 @@ export class SimpleCharacter {
             this.animation.mixer?.update(this.time.delta * 0.001)
         }
     }
+
+    public destroy() {
+        if (this.experience.debug.active && this.experience.debug.ui) {
+            this.debugFolder?.destroy()
+        }
+    }
 }

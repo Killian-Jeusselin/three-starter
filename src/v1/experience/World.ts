@@ -3,7 +3,6 @@ import * as THREE from "three";
 import {Environment} from "./Environnement";
 import {Resources} from "../classes/Resources";
 import {Floor} from "./Floor";
-import {Character} from "./Character";
 import {Dummy} from "./Dummy";
 import {SimpleCharacter} from "../classes/SimpleCharacter";
 
@@ -13,10 +12,10 @@ export class World {
     private scene: THREE.Scene;
     private environment: Environment;
     private resources: Resources;
-    private floor: Floor;
-    private character: SimpleCharacter;
-    private dummy: Dummy;
-    private characterSnd: SimpleCharacter;
+    private floor: Floor | undefined;
+    private character: SimpleCharacter | undefined;
+    private dummy: Dummy | undefined;
+    private characterSnd: SimpleCharacter | undefined;
 
     constructor() {
         this.experience = new Experience()

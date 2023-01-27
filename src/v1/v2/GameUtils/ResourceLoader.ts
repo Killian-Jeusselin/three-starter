@@ -2,16 +2,18 @@ import {SourceInterface} from "../../experience/sources";
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
 import * as THREE from "three";
+import {EventEmitter} from "./EventEmitter";
 
-export class ResourceLoader {
+export class ResourceLoader extends EventEmitter {
     public resource: SourceInterface;
     private loaders: any;
     public isLoaded: boolean = false;
     public item: any;
     private onLoaded: () => void;
-    type: 'gltf' | 'texture' | 'cubeTexture' | 'fbx';
+    public type: 'gltf' | 'texture' | 'cubeTexture' | 'fbx' | undefined;
 
     constructor(resource: SourceInterface, onLoaded: () => void) {
+        super()
         this.resource = resource;
         this.onLoaded = onLoaded
         this.setLoaders()
